@@ -19,6 +19,11 @@ const UserSchema = new Schema({
     required: [true, "Please enter a valid password"],
     minlength: [6, "Minimum password length must be 6 characters"],
   },
+  isAdmin: {
+    type: Boolean,
+    require: true,
+    default: true,
+  },
   register_date: {
     type: Date,
     default: Date.now,
