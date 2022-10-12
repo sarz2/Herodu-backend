@@ -1,25 +1,30 @@
 const express = require("express");
+require("dotenv").config({ path: `${__dirname}/.env` });
 const mongoose = require("mongoose");
 const path = require("path");
-const config = require("config");
+const products = require("./data/products");
+const connectDB = require("./database/db");
+
+connectDB();
 
 const app = express();
-app.use(express.json());
 
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static("client/build"));
-  app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
-  });
-}
+app.get("/", (req, res) => {
+  res.send("API is running");
+});
 
-const dbURI = config.get("dbURI");
-const port = process.env.PORT || 4000;
-mongoose
-  .connect(dbURI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    UseCreateIndex: true,
-  })
-  .then((result) => app.listen(port))
-  .catch((err) => console.log(err));
+app.get("/api/products", (req, res) => {
+  res.json(products);
+});
+
+app.get("/api/products/:id", (req, res) => {
+  const product = products.find((p) => p._id == req.params.id);
+  res.json(product);
+});
+
+const PORT = process.env.PORT || 5000;
+
+app.listen(
+  PORT,
+  console.log(`Server is running in ${process.env.NODE_ENV} on port ${PORT}`)
+);
