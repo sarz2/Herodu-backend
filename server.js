@@ -11,6 +11,7 @@ connectDB();
 const app = express();
 
 app.use(express.json());
+app.use(express.urlencoded()); //Could be redundant, will try without this
 
 app.get("/", (req, res) => {
   res.send("API is running");

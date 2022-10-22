@@ -6,10 +6,17 @@ const asyncHandler = require("express-async-handler");
 module.exports.login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
-    res.status(400).json({ msg: "Please enter all fields" });
+    res.status(401);
+    throw new Error("Please Enter All Fields");
   }
 
   const user = await User.findOne({ email });
+
+  if (!user) {
+    res.status(400);
+    throw new Error("User could not be found");
+  }
+
   const matchPassword = bcrypt.compare(password, user.password);
 
   if (user && matchPassword) {
