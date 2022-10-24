@@ -23,7 +23,7 @@ const UserSchema = new Schema({
   isAdmin: {
     type: Boolean,
     require: true,
-    default: true,
+    default: false,
   },
   register_date: {
     type: Date,
