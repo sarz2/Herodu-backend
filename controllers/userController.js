@@ -3,7 +3,8 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const asyncHandler = require("express-async-handler");
 
-module.exports.login = asyncHandler(async (req, res) => {
+//Public Routes
+const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
     res.status(401);
@@ -28,6 +29,7 @@ module.exports.login = asyncHandler(async (req, res) => {
         id: user._id,
         name: user.name,
         email: user.email,
+        isAdmin: user.isAdmin,
         token: generatedToken,
       },
     });
@@ -37,7 +39,29 @@ module.exports.login = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports.getUserProfile = asyncHandler(async (req, res) => {
+const signup = asyncHandler(async (req, res) => {
+  const { name, email, password } = req.body;
+  if (!email || !password || !name) {
+    res.status(400);
+    throw new Error("Please Enter all Fields");
+  }
+
+  const userExists = await User.findOne({ email });
+
+  if (userExists) {
+    res.status(400);
+    throw new Error("User already exists");
+  }
+
+  const user = await User.create({
+    name,
+    email,
+    password,
+  });
+});
+
+//Private Routes /User
+const getUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
 
   if (user) {
@@ -54,7 +78,7 @@ module.exports.getUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports.updateUserProfile = asyncHandler(async (req, res) => {
+const updateUserProfile = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
 
   if (user) {
@@ -88,40 +112,66 @@ module.exports.updateUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports.signup = asyncHandler(async (req, res) => {
-  const { name, email, password } = req.body;
-  if (!email || !password || !name) {
-    res.status(400);
-    throw new Error("Please Enter all Fields");
-  }
+//Private Routes /Admin
+const getAllUsers = asyncHandler(async (req, res) => {
+  const users = await User.find({});
+  res.json(users);
+});
 
-  const userExists = await User.findOne({ email });
-
-  if (userExists) {
-    res.status(400);
-    throw new Error("User already exists");
-  }
-
-  const user = await User.create({
-    name,
-    email,
-    password,
-  });
+const deleteUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id);
 
   if (user) {
-    const generatedToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "30d",
-    });
+    await user.remove();
+    res.json({ message: "User deleted" });
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
+
+const getOneUserById = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id).select("-password");
+
+  if (user) {
+    res.json(user);
+  } else {
+    res.status(404);
+    throw new Error("User not found");
+  }
+});
+
+const updateUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id);
+
+  if (user) {
+    user.name = req.body.name || user.name;
+    user.email = req.body.email || user.email;
+    user.isAdmin = req.body.isAdmin;
+
+    const updatedUser = await user.save();
+
     res.json({
       user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        token: generatedToken,
+        id: updatedUser._id,
+        name: updatedUser.name,
+        email: updatedUser.email,
+        isAdmin: updatedUser.isAdmin,
       },
     });
   } else {
-    res.status(400);
-    throw new Error("Invalid user data");
+    res.status(404);
+    throw new Error("User not found");
   }
 });
+
+module.exports = {
+  login,
+  signup,
+  getUserProfile,
+  updateUserProfile,
+  getAllUsers,
+  deleteUser,
+  getOneUserById,
+  updateUser,
+};
