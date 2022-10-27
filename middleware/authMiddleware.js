@@ -28,4 +28,13 @@ const protectedRoute = asyncHandler(async (req, res, next) => {
   }
 });
 
-module.exports = protectedRoute;
+const isAdmin = (req, res, next) => {
+  if (req.user && req.user.isAdmin) {
+    next();
+  } else {
+    res.status(401);
+    throw new Error("Can not access this, you are not an admin");
+  }
+};
+
+module.exports = { protectedRoute, isAdmin };
