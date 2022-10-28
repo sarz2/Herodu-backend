@@ -1,5 +1,6 @@
 const express = require("express");
 require("dotenv").config({ path: `${__dirname}/.env` });
+const morgan = require("morgan");
 const connectDB = require("./database/db");
 const { notFound, errorHandler } = require("./middleware/errorMiddleware");
 
@@ -9,6 +10,10 @@ const userRoutes = require("./routes/userRoutes");
 connectDB();
 
 const app = express();
+
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("dev"));
+}
 
 app.use(express.json());
 app.use(express.urlencoded()); //Could be redundant, will try without this
