@@ -5,6 +5,7 @@ const router = Router();
 
 router.route("/").get(productController.getProducts);
 router.route("/search/:keyword").get(productController.getProducts);
+router.route("/top").get(productController.getTopRatedProducts);
 router.route("/:id").get(productController.getOneProduct);
 router
   .route("/:id/reviews")

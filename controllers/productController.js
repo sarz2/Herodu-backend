@@ -3,7 +3,7 @@ const asyncHandler = require("express-async-handler");
 
 //Get all products from route api/products
 const getProducts = asyncHandler(async (req, res) => {
-  const pageSize = 2;
+  const pageSize = 6;
   const page = Number(req.query.pageNumber) || 1;
   const keyword = req.query.keyword
     ? {
@@ -72,8 +72,15 @@ const createReview = asyncHandler(async (req, res) => {
   }
 });
 
+const getTopRatedProducts = asyncHandler(async (req, res) => {
+  const products = await Product.find({}).sort({ rating: -1 }).limit(3);
+
+  res.json(products);
+});
+
 module.exports = {
   getOneProduct,
   getProducts,
   createReview,
+  getTopRatedProducts,
 };
