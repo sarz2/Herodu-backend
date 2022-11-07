@@ -22,7 +22,7 @@ const ReviewSchema = new Schema(
     },
   },
   {
-    timestamp: true,
+    timestamps: true,
   }
 );
 
