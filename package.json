@@ -9,7 +9,8 @@
     "client": "npm start --prefix herodu-frontend",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "data:import": "node herodu-backend/seeder",
-    "data:destroy": "node herodu-backend/seeder -d"
+    "data:destroy": "node herodu-backend/seeder -d",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix herodu-frontend && npm run build --prefix herodu-frontend"
   },
   "keywords": [],
   "author": "",
@@ -25,6 +26,7 @@
     "mongodb": "^4.10.0",
     "mongoose": "^6.6.4",
     "morgan": "^1.10.0",
+    "path": "^0.12.7",
     "stripe": "^10.13.0",
     "validator": "^13.7.0"
   },
