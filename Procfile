@@ -1,1 +1,1 @@
-web: node herodu-backend/server.js
+web: node server.js
