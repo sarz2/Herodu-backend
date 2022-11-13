@@ -178,7 +178,7 @@ const products = [
   {
     name: "Doom Eternal",
     price: 189,
-    image: "/products/Doom_ Eternal.JPG",
+    image: "/products/Doom_Eternal.JPG",
     rating: 0,
     numReviews: 0,
     countInStock: 20,
