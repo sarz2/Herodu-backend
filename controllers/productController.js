@@ -8,7 +8,7 @@ const getProducts = asyncHandler(async (req, res) => {
   const keyword = req.query.keyword
     ? {
         name: {
-          $regex: req.query.keyword, //So that ww don't have to type in the whole name to search for something
+          $regex: req.query.keyword, //So that we don't have to type in the whole name to search for something
           $options: "i", //Not case sensitive
         },
       }
