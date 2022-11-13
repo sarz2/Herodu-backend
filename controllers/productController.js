@@ -1,6 +1,7 @@
 const Product = require("../models/productModel");
 const asyncHandler = require("express-async-handler");
 
+//Public Routes
 //Get all products from route api/products
 const getProducts = asyncHandler(async (req, res) => {
   const pageSize = 6;
@@ -34,6 +35,27 @@ const getOneProduct = asyncHandler(async (req, res) => {
   }
 });
 
+//get top rated products from route api/products/top
+const getTopRatedProducts = asyncHandler(async (req, res) => {
+  const products = await Product.find({}).sort({ rating: -1 }).limit(3);
+
+  res.json(products);
+});
+
+//reduce quantity in product after order from route api/products/:id/:qty
+const reduceQtyInProduct = asyncHandler(async (req, res) => {
+  const product = await Product.findById(req.params.id);
+
+  if (product) {
+    product.countInStock = product.countInStock - req.params.qty;
+  }
+  await product.save();
+
+  res.json(product);
+});
+
+//Private Routes User
+//Create review from route /api/products/:id/reviews
 const createReview = asyncHandler(async (req, res) => {
   const { rating, comment } = req.body;
 
@@ -70,23 +92,6 @@ const createReview = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error("Product not found");
   }
-});
-
-const getTopRatedProducts = asyncHandler(async (req, res) => {
-  const products = await Product.find({}).sort({ rating: -1 }).limit(3);
-
-  res.json(products);
-});
-
-const reduceQtyInProduct = asyncHandler(async (req, res) => {
-  const product = await Product.findById(req.params.id);
-
-  if (product) {
-    product.countInStock = product.countInStock - req.params.qty;
-  }
-  await product.save();
-
-  res.json(product);
 });
 
 module.exports = {

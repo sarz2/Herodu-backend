@@ -1,5 +1,6 @@
 const bcrypt = require("bcryptjs");
 
+//Some users to fill database with
 const users = [
   {
     name: "Admin User",

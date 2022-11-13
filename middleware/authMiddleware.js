@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const asyncHandler = require("express-async-handler");
 const User = require("../models/userModel");
 
+//Middleware for checking users
 const protectedRoute = asyncHandler(async (req, res, next) => {
   let token;
   if (
@@ -28,6 +29,7 @@ const protectedRoute = asyncHandler(async (req, res, next) => {
   }
 });
 
+//Middleware for checking Admin
 const isAdmin = (req, res, next) => {
   if (req.user && req.user.isAdmin) {
     next();

@@ -1,9 +1,11 @@
+//If user goes to link that does not exist
 const notFound = (req, res, next) => {
   const error = new Error(`Not found - ${req.originalUrl}`);
   res.status(404);
   next(error);
 };
 
+//Errorhandler for more clear errors
 const errorHandler = (err, req, res, next) => {
   let statusCode = res.statusCode;
 
