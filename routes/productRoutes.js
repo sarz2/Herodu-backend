@@ -10,5 +10,6 @@ router.route("/:id").get(productController.getOneProduct);
 router
   .route("/:id/reviews")
   .post(protectedRoute, productController.createReview);
+router.route("/:id/:qty").post(productController.reduceQtyInProduct);
 
 module.exports = router;

@@ -78,9 +78,21 @@ const getTopRatedProducts = asyncHandler(async (req, res) => {
   res.json(products);
 });
 
+const reduceQtyInProduct = asyncHandler(async (req, res) => {
+  const product = await Product.findById(req.params.id);
+
+  if (product) {
+    product.countInStock = product.countInStock - req.params.qty;
+  }
+  await product.save();
+
+  res.json(product);
+});
+
 module.exports = {
   getOneProduct,
   getProducts,
   createReview,
   getTopRatedProducts,
+  reduceQtyInProduct,
 };
