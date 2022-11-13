@@ -8,8 +8,8 @@
     "server": "nodemon server",
     "client": "npm start --prefix herodu-frontend",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "data:import": "node herodu-backend/seeder",
-    "data:destroy": "node herodu-backend/seeder -d",
+    "data:import": "node seeder",
+    "data:destroy": "node seeder -d",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false"
   },
   "keywords": [],
