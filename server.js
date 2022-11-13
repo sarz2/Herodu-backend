@@ -22,7 +22,7 @@ app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
 
 app.get("/", (req, res) => {
-  res.send("API is running");
+  res.send("Herodu-backend Api");
 });
 
 app.use(notFound);
