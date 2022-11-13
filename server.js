@@ -1,4 +1,5 @@
 const path = require("path");
+const cors = require("cors");
 const express = require("express");
 require("dotenv").config({ path: `${__dirname}/.env` });
 const morgan = require("morgan");
@@ -17,6 +18,7 @@ if (process.env.NODE_ENV === "development") {
 }
 
 app.use(express.json());
+app.use(cors({ origin: "https://herodu-app.netlify.app/" }));
 
 app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
