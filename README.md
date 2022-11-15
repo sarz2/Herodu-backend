@@ -37,13 +37,15 @@ MONGO_CONNECTION_STRING <br>
 MONGO_DB_NAME<br>
 JWT_SECRET
 
-
-
-4. Start the server with ``` npm run server ```
+4. Run ```npm run data:import ```to seed the database with the products and temporary users.
 
 
 
-5. Navigate to http://localhost:5000 where the app will run locally
+5. Start the server with ``` npm run server ```
+
+
+
+6. Navigate to http://localhost:5000 where the app will run locally
 
 
 ## Goals
